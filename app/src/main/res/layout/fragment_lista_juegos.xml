@@ -5,7 +5,8 @@
     android:background="#66E789"
     android:layout_height="fill_parent"
     android:layout_width="fill_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:id="@+id/LinLjueg">
 
     <ListView
         android:id="@+id/games_list"

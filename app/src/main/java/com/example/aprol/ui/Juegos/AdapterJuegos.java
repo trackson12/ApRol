@@ -1,0 +1,91 @@
+package com.example.aprol.ui.Juegos;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.aprol.R;
+import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
+
+public class AdapterJuegos extends RecyclerView.Adapter<AdapterJuegos.ViewHolder> {
+    // Array list que le pasamos
+    private ArrayList<Juegos> juegos;
+
+    private Context context;
+    // Cponstructor
+    public AdapterJuegos(ArrayList<Juegos> juegos, Context context) {
+        this.juegos = juegos;
+        this.context = context;
+    }
+
+
+    // Le pasamos el ViewHolder y el layout que va a usar
+    @Override
+    public ViewHolder onCreateViewHolder( ViewGroup parent, int viewType) {
+        View view=LayoutInflater.from(context).inflate(R.layout.lista_games,parent,false);
+        ViewHolder holder=new ViewHolder(view);
+        return holder;
+    }
+    // Publicamos el evento en la posición del holder y lo programamos
+    @Override
+    public void onBindViewHolder( ViewHolder holder, final int position) {
+        final Juegos actual=juegos.get(position);
+        holder.titulo.setText(actual.getnombre());
+        holder.fecha.setText(actual.getn_jugadores());
+        Picasso.with(context).load(actual.getImagen()).transform(new imagenRedonda()).into(holder.imagen);
+        holder.parentLayout.setOnClickListener(new  View.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, Fragment_Detalles_Juegos.class);
+                Bundle b=new Bundle();
+                final Juegos jue=juegos.get(position);
+                b.putSerializable("juego",jue);
+                intent.putExtras(b);
+                context.startActivity(intent);
+            }
+        });
+
+    }
+
+
+    @Override
+    public int getItemCount() {
+        return juegos.size();
+    }
+    // Aqui está el holder y lo que va a manejar, es decir la vista para interactuar
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        // componentes
+        TextView titulo,fecha;
+        ImageView imagen;
+        RelativeLayout  parentLayout;
+
+        public ViewHolder( View itemView) {
+            super(itemView);
+            titulo=(TextView) itemView.findViewById(R.id.tituloJuego);
+            fecha=(TextView) itemView.findViewById(R.id.N_jug);
+            imagen=(ImageView) itemView.findViewById(R.id.imgJuego);
+            parentLayout=itemView.findViewById(R.id.parent_layout);
+        }
+    }
+    //para ver la noticia
+    public void verJuego(int position, Juegos juegos){
+        Intent intent = new Intent(context, Fragment_Detalles_Juegos.class);
+        Bundle pasarNoticia=new Bundle();
+        pasarNoticia.putSerializable("juego", juegos);
+        intent.putExtras(pasarNoticia);
+        context.startActivity(intent);
+    }
+
+
+
+}

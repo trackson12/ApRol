@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@id/nav_home">
+    app:startDestination="@id/nav_login">
 
     <fragment
         android:id="@+id/nav_home"
@@ -30,16 +30,16 @@
         tools:layout="@layout/fragment_tools" />
 
     <fragment
-        android:id="@+id/nav_share"
+        android:id="@+id/nav_Ayuda"
         android:name="com.example.aprol.ui.share.ShareFragment"
-        android:label="@string/menu_share"
-        tools:layout="@layout/fragment_share" />
+        android:label="Ayuda"
+        tools:layout="@layout/fragment_ayuda" />
 
     <fragment
-        android:id="@+id/nav_send"
+        android:id="@+id/nav_Contacto"
         android:name="com.example.aprol.ui.send.SendFragment"
-        android:label="@string/menu_send"
-        tools:layout="@layout/fragment_send" />
+        android:label="Contacto"
+        tools:layout="@layout/fragment_contacto" />
     <fragment
         android:id="@+id/nav_torneos"
         android:name="com.example.aprol.ui.Torneos.Fragment_Torneos"
