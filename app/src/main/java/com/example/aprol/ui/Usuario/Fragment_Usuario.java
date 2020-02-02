@@ -1,12 +1,17 @@
 package com.example.aprol.ui.Usuario;
 
 import android.content.Context;
+import android.hardware.SensorManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,19 +20,43 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.aprol.R;
+import com.example.aprol.objeto.Cliente;
+import com.example.aprol.rest.APIUtils;
+import com.example.aprol.rest.RestCliente;
+import com.example.aprol.rest.RetrofitClient;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class Fragment_Usuario extends Fragment {
     private View root;
     private Fragment_Registro f2;
     private Fragment_Usuario f1;
     Button b1;
+    Button aceptar;
+    EditText usuario;
+    EditText pass;
     private Context context;
+    RestCliente clienteRest;
+    APIUtils util;
+    private SensorManager sensorManager;
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         root= inflater.inflate(R.layout.login, container, false);
         b1 = (Button) root.findViewById(R.id.btnRegistrar);
+        aceptar = (Button) root.findViewById(R.id.btnAceptar);
+        usuario = (EditText) root.findViewById(R.id.etUsuLogin);
+        pass = (EditText) root.findViewById(R.id.etPwdLogin);
+        sensorManager = (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
+
         b1.setOnClickListener(new View.OnClickListener() {
+
+
+
+
             @Override
             public void onClick(View v) {
 
@@ -66,6 +95,39 @@ public class Fragment_Usuario extends Fragment {
 
 
         });
+
+        if(isNetworkAvailable()) {
+            clienteRest = APIUtils.getService();
+        }else{
+            Toast.makeText(getContext(), "Es necesaria una conexión a internet", Toast.LENGTH_SHORT).show();
+        }
+
+        aceptar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               // Call<Cliente> call = clienteRest.usuario_registrado(usuario.toString(),pass.toString());
+                Call<Cliente> call = clienteRest.findById((long) 1);
+                call.enqueue(new Callback<Cliente>() {
+                    @Override
+                    public void onResponse(Call<Cliente> call, Response<Cliente> response) {
+
+                        if (response.isSuccessful()){
+                            Toast.makeText(getContext(), "Existe el cliente", Toast.LENGTH_SHORT).show();
+
+                        }else {
+                            Toast.makeText(getContext(), "8------D", Toast.LENGTH_SHORT).show();
+
+                        }
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<Cliente> call, Throwable t) {
+
+                    }
+                });
+            }
+        });
         return root;
     }
 
@@ -74,7 +136,22 @@ public class Fragment_Usuario extends Fragment {
         return null;
     }
 
+    private boolean isNetworkAvailable() {
+        /*
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) this.getSystemService
+                (Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
 
+         */
+        ConnectivityManager connMgr = (ConnectivityManager) getActivity()
+                .getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+
+        return networkInfo != null && networkInfo.isConnected();
+    }
 }
 
 
