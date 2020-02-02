@@ -1,5 +1,7 @@
 package com.example.aprol.objeto;
 
+import android.graphics.Bitmap;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -9,8 +11,16 @@ public class Juego {
     @Expose
     private String nombre;
 
-    @SerializedName("n_jug")
+    @SerializedName("foto")
     @Expose
-    private String n_jug;
+    private Bitmap foto;
+
+    @SerializedName("n_jugadores")
+    @Expose
+    private String n_jugadores;
+
+    @SerializedName("descripcion")
+    @Expose
+    private String descripcion;
 
 }

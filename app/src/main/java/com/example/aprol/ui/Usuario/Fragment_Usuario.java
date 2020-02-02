@@ -105,8 +105,8 @@ public class Fragment_Usuario extends Fragment {
         aceptar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               // Call<Cliente> call = clienteRest.usuario_registrado(usuario.toString(),pass.toString());
-                Call<Cliente> call = clienteRest.findById((long) 1);
+               //Call<Cliente> call = clienteRest.usuario_registrado(usuario.getText().toString());
+                Call<Cliente> call = clienteRest.findById(usuario.getText().toString());
                 call.enqueue(new Callback<Cliente>() {
                     @Override
                     public void onResponse(Call<Cliente> call, Response<Cliente> response) {

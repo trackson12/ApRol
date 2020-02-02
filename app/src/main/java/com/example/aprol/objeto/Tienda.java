@@ -44,4 +44,12 @@ public class Tienda {
     @Expose
     private int puntuacion;
 
+    @SerializedName("longitud")
+    @Expose
+    private Double longitud;
+
+    @SerializedName("latitud")
+    @Expose
+    private Double latitud;
+
 }

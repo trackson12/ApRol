@@ -27,8 +27,8 @@ public interface RestCliente {
     /*@GET("registro/{id}")
     Call<Cliente> findById(@Path("id") Long id);
 */
-    @GET("registro/{id}")
-    Call<Cliente> findById(@Path("id") Long id);
+    @GET("registro/{usuario}")
+    Call<Cliente> findById(@Path("usuario") String usuario);
     // Crear un producto
     //POST: http://localhost:8080/productos
     @POST("registro/")
@@ -46,10 +46,10 @@ public interface RestCliente {
 
     //Comprueba que el cliente este registrado
     @FormUrlEncoded
-    @POST("registro/{id}")
+    @POST("registro")
     Call<Cliente> usuario_registrado(
-            @Field("id") Long id
-            //@Field("usuario") String usuario,
-           // @Field("pass")String pass
+            //@Field("id") Long id
+            @Field("usuario") String usuario
+            //@Field("pass")String pass
     );
 }

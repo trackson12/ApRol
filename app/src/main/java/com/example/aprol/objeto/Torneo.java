@@ -11,15 +11,12 @@ public class Torneo {
     @Expose
     private String nombre;
 
+    @SerializedName("direc")
+    @Expose
+    private String direc;
+
     @SerializedName("fecha")
     @Expose
     private String fecha;
 
-    @SerializedName("foto")
-    @Expose
-    private Bitmap foto;
-
-    @SerializedName("direc")
-    @Expose
-    private String direc;
 }
