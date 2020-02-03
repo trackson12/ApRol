@@ -22,6 +22,10 @@ public class APIUtils {
         return RetrofitClient.getJuego(API_URL).create(RestJuego.class);
     }
 
+    public static RestTienda getServiceTienda() {
+        return  RetrofitClient.getTienda(API_URL).create(RestTienda.class);
+    }
+
 
 
 }
