@@ -17,11 +17,13 @@ import com.example.aprol.R;
 import com.example.aprol.objeto.Juego;
 import com.squareup.picasso.Picasso;
 
+import java.io.Serializable;
+import java.net.URI;
 import java.util.ArrayList;
 
 public class AdapterJuegos extends RecyclerView.Adapter<AdapterJuegos.ViewHolder> implements ListAdapter {
     // Array list que le pasamos
-    private ArrayList<Juegos> juegos;
+    //private ArrayList<Juegos> juegos;
     private ArrayList<Juego> juego;
     private Context context;
     // Cponstructor
@@ -46,18 +48,17 @@ public class AdapterJuegos extends RecyclerView.Adapter<AdapterJuegos.ViewHolder
     // Publicamos el evento en la posición del holder y lo programamos
     @Override
     public void onBindViewHolder( ViewHolder holder, final int position) {
-        final Juegos actual=juegos.get(position);
-        holder.titulo.setText(actual.getnombre());
-        holder.fecha.setText(actual.getn_jugadores());
-        Picasso.with(context).load(actual.getImagen()).transform(new imagenRedonda()).into(holder.imagen);
+        final Juego actual=juego.get(position);
+        holder.titulo.setText(actual.getNombre());
+       // Picasso.with(context).load(actual.getFoto()).transform(new imagenRedonda()).into(holder.imagen);
         holder.parentLayout.setOnClickListener(new  View.OnClickListener(){
 
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, Fragment_Detalles_Juegos.class);
                 Bundle b=new Bundle();
-                final Juegos jue=juegos.get(position);
-                b.putSerializable("juego",jue);
+                final Juego jue=juego.get(position);
+                b.putSerializable("juego", (Serializable) jue);
                 intent.putExtras(b);
                 context.startActivity(intent);
             }
@@ -68,7 +69,7 @@ public class AdapterJuegos extends RecyclerView.Adapter<AdapterJuegos.ViewHolder
 
     @Override
     public int getItemCount() {
-        return juegos.size();
+        return juego.size();
     }
 
     @Override

@@ -50,7 +50,7 @@ public class Fragment_Juegos extends Fragment {
         root= inflater.inflate(R.layout.fragment_lista_juegos, container, false);
         constr = (ConstraintLayout) root.findViewById(R.id.rvFragmentJuego);
         linla = (LinearLayout) root.findViewById(R.id.LinLjueg);
-        recyclerView =   root.findViewById(R.id.rvFragmentJuego);
+        recyclerView = (RecyclerView)  root.findViewById(R.id.rvFragmentJuego_recycler);
         //setContentView(R.layout.fragment_lista_juegos);
 
         if(isNetworkAvailable()) {
@@ -93,7 +93,7 @@ public class Fragment_Juegos extends Fragment {
                     // Nos hace el pasrser automáticamente
                     list = response.body();
                    // adapter = new AdapterJuegos(list, getContext(),getActivity(),getFragmentManager());
-                    recyclerView =  root.findViewById(R.id.rvFragmentJuego);
+
                     recyclerView.setHasFixedSize(true);
                     recyclerView.setLayoutManager(new LinearLayoutManager(getActivity().getBaseContext()));
                     recyclerView.setAdapter(new AdapterJuegos((ArrayList<Juego>) list,getContext()));

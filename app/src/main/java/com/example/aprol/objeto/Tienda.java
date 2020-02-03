@@ -52,4 +52,52 @@ public class Tienda {
     @Expose
     private Double latitud;
 
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public String getDireccion() {
+        return direccion;
+    }
+
+    public String getH_lunes() {
+        return h_lunes;
+    }
+
+    public String getH_martes() {
+        return h_martes;
+    }
+
+    public String getH_miercoles() {
+        return h_miercoles;
+    }
+
+    public String getH_jueves() {
+        return h_jueves;
+    }
+
+    public String getH_viernes() {
+        return h_viernes;
+    }
+
+    public String getH_sabado() {
+        return h_sabado;
+    }
+
+    public String getH_domingo() {
+        return h_domingo;
+    }
+
+    public int getPuntuacion() {
+        return puntuacion;
+    }
+
+    public Double getLongitud() {
+        return longitud;
+    }
+
+    public Double getLatitud() {
+        return latitud;
+    }
 }
