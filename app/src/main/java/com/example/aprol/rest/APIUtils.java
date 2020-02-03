@@ -18,6 +18,10 @@ public class APIUtils {
         return RetrofitClient.getClient(API_URL).create(RestCliente.class);
     }
 
+    public static RestJuego getServiceJuego() {
+        return RetrofitClient.getJuego(API_URL).create(RestJuego.class);
+    }
+
 
 
 }
