@@ -15,10 +15,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.aprol.R;
 import com.example.aprol.objeto.Juego;
-import com.squareup.picasso.Picasso;
 
 import java.io.Serializable;
-import java.net.URI;
 import java.util.ArrayList;
 
 public class AdapterJuegos extends RecyclerView.Adapter<AdapterJuegos.ViewHolder> implements ListAdapter {

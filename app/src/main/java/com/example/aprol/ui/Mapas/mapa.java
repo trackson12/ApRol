@@ -1,25 +1,17 @@
 package com.example.aprol.ui.Mapas;
 
 import android.Manifest;
-import android.app.AlertDialog;
-import android.content.Context;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.os.Environment;
-import android.os.Handler;
-import android.os.SystemClock;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Chronometer;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -50,15 +42,9 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
-import java.util.TimerTask;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -187,7 +173,9 @@ public class mapa extends Fragment implements OnMapReadyCallback, GoogleMap.OnMa
                         comercio = list.get(i);
                         tiendas = new LatLng(comercio.getLatitud(),comercio.getLongitud());
 
-                        mMap.addMarker(new MarkerOptions().position(tiendas).title(comercio.getNombre()));
+                        mMap.addMarker(new MarkerOptions().position(tiendas).title(comercio.getNombre()+","+comercio.getDireccion())
+                                .snippet("Horarios "+comercio.getH_lunes()+"\n"+comercio.getH_martes())
+                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
                     }
 
 
