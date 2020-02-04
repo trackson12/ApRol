@@ -36,6 +36,7 @@ public class MapsActivity2 extends FragmentActivity implements OnMapReadyCallbac
     private RestTienda tiendaRest;
     private Tienda comercio;
     List<Tienda> list = new ArrayList<Tienda>();
+    LatLng tiendas = new LatLng(38.690265, -4.106939);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,6 +101,7 @@ public class MapsActivity2 extends FragmentActivity implements OnMapReadyCallbac
                     for (int i = 0 ; i<list.size() ; i++ ){
                         comercio = list.get(i);
 
+                        mMap.addMarker(new MarkerOptions().position(tiendas).title("Marker in Sydney"));
                     }
 
 
