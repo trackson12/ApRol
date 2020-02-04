@@ -131,6 +131,9 @@ public class mapa extends Fragment implements OnMapReadyCallback, GoogleMap.OnMa
         // Situar la camara inicialmente a una posición determinada
         situarCamaraMapa();
         // Para usar eventos
+
+
+
         mGoogleApiClient = new GoogleApiClient.Builder(getContext())
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)

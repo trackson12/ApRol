@@ -16,6 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+
             <androidx.recyclerview.widget.RecyclerView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -23,6 +24,9 @@
                 xmlns:tools="http://schemas.android.com/tools"
                 android:scrollbars="vertical"
                 android:id="@+id/rvFragmentJuego" />
+
+
+
 
         </ScrollView>
 

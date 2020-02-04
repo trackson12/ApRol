@@ -1,0 +1,55 @@
+package com.example.aprol.rest;
+
+
+
+import com.example.aprol.objeto.Cliente;
+
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.http.Body;
+import retrofit2.http.DELETE;
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
+import retrofit2.http.GET;
+import retrofit2.http.POST;
+import retrofit2.http.PUT;
+import retrofit2.http.Path;
+
+public interface RestCliente {
+    // Obtener todos
+    // GET: http://localhost:8080/productos
+    @GET("registro/")
+    Call<List<Cliente>> findAll();
+
+    // Obtener uno producto por ID
+    // GET: http://localhost:8080/productos/{id}
+    /*@GET("registro/{id}")
+    Call<Cliente> findById(@Path("id") Long id);
+*/
+    @GET("registro/{usuario}")
+    Call<Cliente> findById(@Path("usuario") String usuario);
+    // Crear un producto
+    //POST: http://localhost:8080/productos
+    @POST("registro/")
+    Call<Cliente> create(@Body Cliente producto);
+
+    // Elimina un productp
+    // DELETE: http://localhost:8080/productos/{id}
+    @DELETE("registro/{id}")
+    Call<Cliente> delete(@Path("id") Long id);
+
+    // Actualiza un producto
+    // PUT: http://localhost:8080/productos/{id}
+    @PUT("registro/{id}")
+    Call<Cliente> update(@Path("id") Long id, @Body Cliente producto);
+
+    //Comprueba que el cliente este registrado
+    @FormUrlEncoded
+    @POST("registro")
+    Call<Cliente> usuario_registrado(
+            //@Field("id") Long id
+            @Field("usuario") String usuario
+            //@Field("pass")String pass
+    );
+}
