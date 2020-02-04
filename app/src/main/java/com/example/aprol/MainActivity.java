@@ -1,5 +1,6 @@
 package com.example.aprol;
 
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 
 import com.example.aprol.ui.Usuario.Fragment_Usuario;
@@ -31,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
