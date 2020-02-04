@@ -2,10 +2,13 @@ package com.example.aprol.ui.Mapas;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -27,6 +30,9 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.example.aprol.R;
+import com.example.aprol.objeto.Tienda;
+import com.example.aprol.rest.APIUtils;
+import com.example.aprol.rest.RestTienda;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -50,8 +56,13 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class mapa extends Fragment implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, GoogleApiClient.ConnectionCallbacks,
@@ -85,6 +96,11 @@ public class mapa extends Fragment implements OnMapReadyCallback, GoogleMap.OnMa
     private Chronometer chronometer;
     private  String fichero_xml=null;
     private Marker avPuntos = null;
+
+    private RestTienda tiendaRest;
+    private Tienda comercio;
+    List<Tienda> list = new ArrayList<Tienda>();
+    LatLng tiendas = new LatLng(38.690265, -4.106939);
 
     // Para obtener el punto actual (no es necesario para el mapa)
     // Pero si para obtener las latitud y la longitud
@@ -130,6 +146,16 @@ public class mapa extends Fragment implements OnMapReadyCallback, GoogleMap.OnMa
         obtenerPosicion();
         // Situar la camara inicialmente a una posición determinada
         situarCamaraMapa();
+
+       //if(isNetworkAvailable()) {
+            tiendaRest =  APIUtils.getServiceTienda();
+            obtenerTiendas();
+
+        //}else{
+           // Toast.makeText(this, "Es necesaria una conexión a internet", Toast.LENGTH_SHORT).show();
+        //}
+
+
         // Para usar eventos
         mGoogleApiClient = new GoogleApiClient.Builder(getContext())
                 .addConnectionCallbacks(this)
@@ -141,6 +167,39 @@ public class mapa extends Fragment implements OnMapReadyCallback, GoogleMap.OnMa
                 .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
                 .setInterval(10 * 1000)        // 10 segundos en milisegundos
                 .setFastestInterval(1 * 1000); // 1 segundo en milisegundos
+    }
+
+    private void obtenerTiendas() {
+
+        // Creamos la tarea que llamará al servicio rest y la encolamos
+        Call<List<Tienda>> call = tiendaRest.findAll();
+        call.enqueue(new Callback<List<Tienda>>() {
+            @Override
+            public void onResponse(Call<List<Tienda>> call, Response<List<Tienda>> response) {
+                if(response.isSuccessful()){
+
+                    list = response.body();
+
+                    for (int i = 0 ; i<list.size() ; i++ ){
+                        comercio = list.get(i);
+
+                        mMap.addMarker(new MarkerOptions().position(tiendas).title("Marker in Sydney"));
+                    }
+
+
+
+
+
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Tienda>> call, Throwable t) {
+                Log.e("ERROR: ", t.getMessage());
+            }
+        });
+
     }
 
 
@@ -207,6 +266,10 @@ public class mapa extends Fragment implements OnMapReadyCallback, GoogleMap.OnMa
         // Señalamos el tráfico
         mMap.setTrafficEnabled(true);
     }
+
+
+
+
     // Evento de procesar o hacer click en un marker
     @Override
     public boolean onMarkerClick(Marker marker) {
@@ -380,4 +443,17 @@ public class mapa extends Fragment implements OnMapReadyCallback, GoogleMap.OnMa
         }
 
     }
+/**
+    private boolean isNetworkAvailable() {
+
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) this.get
+                (Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+
+
+
+    }
+**/
 }
