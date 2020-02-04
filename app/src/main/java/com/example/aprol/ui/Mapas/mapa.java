@@ -157,6 +157,9 @@ public class mapa extends Fragment implements OnMapReadyCallback, GoogleMap.OnMa
 
 
         // Para usar eventos
+
+
+
         mGoogleApiClient = new GoogleApiClient.Builder(getContext())
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
