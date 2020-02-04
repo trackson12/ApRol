@@ -88,6 +88,8 @@ public class mapa extends Fragment implements OnMapReadyCallback, GoogleMap.OnMa
     List<Tienda> list = new ArrayList<Tienda>();
     LatLng tiendas = new LatLng(38.690265, -4.106939);
 
+    String puntuacion;
+
     // Para obtener el punto actual (no es necesario para el mapa)
     // Pero si para obtener las latitud y la longitud
     private FusedLocationProviderClient mPosicion;
@@ -168,13 +170,24 @@ public class mapa extends Fragment implements OnMapReadyCallback, GoogleMap.OnMa
                 if(response.isSuccessful()){
 
                     list = response.body();
-
                     for (int i = 0 ; i<list.size() ; i++ ){
+
                         comercio = list.get(i);
+                        if (comercio.getPuntuacion()==5){
+                            puntuacion = "5";
+                        }else if(comercio.getPuntuacion()==4){
+                            puntuacion = "4";
+                        }else if(comercio.getPuntuacion()==3){
+                            puntuacion = "3";
+                        }else if(comercio.getPuntuacion()==2){
+                            puntuacion = "2";
+                        }else if(comercio.getPuntuacion()==1){
+                            puntuacion = "1";
+                        }
                         tiendas = new LatLng(comercio.getLatitud(),comercio.getLongitud());
 
                         mMap.addMarker(new MarkerOptions().position(tiendas).title(comercio.getNombre()+","+comercio.getDireccion())
-                                .snippet("Horarios "+comercio.getH_lunes()+"\n"+comercio.getH_martes())
+                                .snippet("Horarios "+comercio.getH_lunes()+" Puntuación :"+puntuacion)
                                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
                     }
 
