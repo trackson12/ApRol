@@ -51,6 +51,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.Usuario.RegistroActivity"></activity>
+        <activity android:name=".MainActivity"></activity>
+
     </application>
 
 </manifest>

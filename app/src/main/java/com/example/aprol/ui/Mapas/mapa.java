@@ -185,8 +185,9 @@ public class mapa extends Fragment implements OnMapReadyCallback, GoogleMap.OnMa
 
                     for (int i = 0 ; i<list.size() ; i++ ){
                         comercio = list.get(i);
+                        tiendas = new LatLng(comercio.getLatitud(),comercio.getLongitud());
 
-                        mMap.addMarker(new MarkerOptions().position(tiendas).title("Marker in Sydney"));
+                        mMap.addMarker(new MarkerOptions().position(tiendas).title(comercio.getNombre()));
                     }
 
 
