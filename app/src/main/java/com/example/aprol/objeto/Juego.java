@@ -1,12 +1,13 @@
 package com.example.aprol.objeto;
 
 import android.graphics.Bitmap;
-import android.net.Uri;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Juego {
+import java.io.Serializable;
+
+public class Juego implements Serializable {
 
     @SerializedName("nombre")
     @Expose
