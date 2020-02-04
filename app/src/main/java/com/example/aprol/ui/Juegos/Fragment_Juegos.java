@@ -48,7 +48,7 @@ public class Fragment_Juegos extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         root= inflater.inflate(R.layout.fragment_lista_juegos, container, false);
         constr = (ConstraintLayout) root.findViewById(R.id.rvFragmentJuego);
-        linla = (LinearLayout) root.findViewById(R.id.LinLjueg);
+        //linla = (LinearLayout) root.findViewById(R.id.LinLjueg);
         recyclerView = (RecyclerView)  root.findViewById(R.id.rvFragmentJuego_recycler);
         //setContentView(R.layout.fragment_lista_juegos);
 

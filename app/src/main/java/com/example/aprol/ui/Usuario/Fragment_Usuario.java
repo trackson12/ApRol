@@ -5,7 +5,6 @@ import android.hardware.SensorManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +22,6 @@ import com.example.aprol.R;
 import com.example.aprol.objeto.Cliente;
 import com.example.aprol.rest.APIUtils;
 import com.example.aprol.rest.RestCliente;
-import com.example.aprol.rest.RetrofitClient;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -98,36 +96,38 @@ public class Fragment_Usuario extends Fragment {
 
         if(isNetworkAvailable()) {
             clienteRest = APIUtils.getService();
+
+            aceptar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //Call<Cliente> call = clienteRest.usuario_registrado(usuario.getText().toString());
+                    Call<Cliente> call = clienteRest.findById(usuario.getText().toString());
+                    call.enqueue(new Callback<Cliente>() {
+                        @Override
+                        public void onResponse(Call<Cliente> call, Response<Cliente> response) {
+
+                            if (response.isSuccessful()){
+                                Toast.makeText(getContext(), "Existe el cliente", Toast.LENGTH_SHORT).show();
+
+                            }else {
+                                Toast.makeText(getContext(), "8------D", Toast.LENGTH_SHORT).show();
+
+                            }
+
+                        }
+
+                        @Override
+                        public void onFailure(Call<Cliente> call, Throwable t) {
+
+                        }
+                    });
+                }
+            });
         }else{
             Toast.makeText(getContext(), "Es necesaria una conexión a internet", Toast.LENGTH_SHORT).show();
         }
 
-        aceptar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-               //Call<Cliente> call = clienteRest.usuario_registrado(usuario.getText().toString());
-                Call<Cliente> call = clienteRest.findById(usuario.getText().toString());
-                call.enqueue(new Callback<Cliente>() {
-                    @Override
-                    public void onResponse(Call<Cliente> call, Response<Cliente> response) {
 
-                        if (response.isSuccessful()){
-                            Toast.makeText(getContext(), "Existe el cliente", Toast.LENGTH_SHORT).show();
-
-                        }else {
-                            Toast.makeText(getContext(), "8------D", Toast.LENGTH_SHORT).show();
-
-                        }
-
-                    }
-
-                    @Override
-                    public void onFailure(Call<Cliente> call, Throwable t) {
-
-                    }
-                });
-            }
-        });
         return root;
     }
 

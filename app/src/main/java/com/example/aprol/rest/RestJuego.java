@@ -29,7 +29,7 @@ public interface RestJuego {
     Call<Cliente> findById(@Path("id") Long id);
 */
     @GET("juego/{nombre}")
-    Call<Juego> findById(@Path("usuario") String usuario);
+    Call<Juego> findById(@Path("nombre") String nombre);
     // Crear un producto
     //POST: http://localhost:8080/productos
     @POST("juego/")
