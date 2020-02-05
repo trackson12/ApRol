@@ -7,6 +7,7 @@ import android.hardware.SensorManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,6 +20,10 @@ import com.example.aprol.R;
 import com.example.aprol.objeto.Cliente;
 import com.example.aprol.rest.APIUtils;
 import com.example.aprol.rest.RestCliente;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -44,6 +49,12 @@ public class LoginActivity extends AppCompatActivity {
 
     APIUtils util;
     private SensorManager sensorManager;
+
+    Calendar cal = Calendar.getInstance();
+
+    Date date = cal.getTime();
+    SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
+    String date1 = format1.format(date);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,6 +111,36 @@ public class LoginActivity extends AppCompatActivity {
                     });
                 }
             });
+
+
+            /**
+            Cliente p = new Cliente(date1);
+            Call<Cliente> call = clienteRest.create(p);
+            call.enqueue(new Callback<Cliente>() {
+
+                @Override
+                public void onResponse(Call<Cliente> call, Response<Cliente> response) {
+                    if(response.isSuccessful()){
+                        Toast.makeText(LoginActivity.this, "Cliente guardado", Toast.LENGTH_SHORT).show();
+                    }else {
+                        Toast.makeText(LoginActivity.this, "Error al guardar cliente", Toast.LENGTH_SHORT).show();
+
+                    }
+
+                }
+
+                // Si error
+                @Override
+                public void onFailure(Call<Cliente> call, Throwable t) {
+                    Log.e("ERROR: ", t.getMessage());
+                }
+            });
+
+            **/
+
+
+
+
         }else{
             Toast.makeText(getBaseContext(), "Es necesaria una conexión a internet", Toast.LENGTH_SHORT).show();
         }

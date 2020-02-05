@@ -51,6 +51,7 @@ public class RegistroActivity extends AppCompatActivity {
     //Recoge la contraseña del layout
     EditText pwd;
 
+
     //Usaremos el interface de cliente
     RestCliente clienteRest;
     @Override

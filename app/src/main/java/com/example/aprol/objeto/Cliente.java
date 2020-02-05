@@ -23,6 +23,10 @@ public class Cliente {
     @Expose
     private String pass;
 
+    @SerializedName("token")
+    @Expose
+    private String token;
+
     public Cliente() {
     }
 
@@ -37,7 +41,9 @@ public class Cliente {
         this.pass = pass;
     }
 
-
+    public Cliente(String token) {
+        this.token = token;
+    }
 
     public int getId() {
         return id;
@@ -69,6 +75,14 @@ public class Cliente {
 
     public void setPassword(String password) {
         this.pass = password;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String fecha) {
+        this.token = fecha;
     }
 
     @Override

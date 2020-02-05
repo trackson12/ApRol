@@ -23,6 +23,11 @@ import com.example.aprol.objeto.Cliente;
 import com.example.aprol.rest.APIUtils;
 import com.example.aprol.rest.RestCliente;
 
+import java.text.SimpleDateFormat;
+
+import java.util.Calendar;
+import java.util.Date;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -40,6 +45,11 @@ public class Fragment_Usuario extends Fragment {
     APIUtils util;
     private SensorManager sensorManager;
 
+    Calendar cal = Calendar.getInstance();
+
+    Date date = cal.getTime();
+    SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
+    String date1 = format1.format(date);
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
@@ -100,7 +110,6 @@ public class Fragment_Usuario extends Fragment {
             aceptar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //Call<Cliente> call = clienteRest.usuario_registrado(usuario.getText().toString());
                     Call<Cliente> call = clienteRest.findById(usuario.getText().toString());
                     call.enqueue(new Callback<Cliente>() {
                         @Override
