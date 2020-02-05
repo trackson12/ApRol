@@ -1,16 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:background="#548FCE"
     android:layout_height="fill_parent"
     android:layout_width="fill_parent"
     android:orientation="vertical">
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/faButton"
+        android:layout_width="67dp"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        app:srcCompat="@android:drawable/ic_btn_speak_now" />
+
     <ListView
         android:id="@+id/tournament_list"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content" >
+
+
+
     </ListView>
+
+
 
 </LinearLayout>
