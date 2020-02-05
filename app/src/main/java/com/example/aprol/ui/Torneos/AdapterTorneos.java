@@ -10,9 +10,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toolbar;
 
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.aprol.R;
+import com.example.aprol.objeto.Torneo;
 import com.example.aprol.ui.Juegos.Fragment_Detalles_Juegos;
 import com.example.aprol.ui.Juegos.Juegos;
 import com.example.aprol.ui.Juegos.imagenRedonda;
@@ -23,13 +25,15 @@ import java.util.ArrayList;
 
 public class AdapterTorneos extends RecyclerView.Adapter<AdapterTorneos.ViewHolder> {
     // Array list que le pasamos
-    private ArrayList<Torneos> torneos;
+    private ArrayList<Torneo> torneo;
+    private FragmentManager fm;
 
     private Context context;
     // Cponstructor
-    public AdapterTorneos(ArrayList<Torneos> torneos, Context context) {
-        this.torneos = torneos;
+    public AdapterTorneos(ArrayList<Torneo> torneo, Context context, FragmentManager fm) {
+        this.torneo = torneo;
         this.context = context;
+        this.fm = fm;
     }
 
 
@@ -50,7 +54,7 @@ public class AdapterTorneos extends RecyclerView.Adapter<AdapterTorneos.ViewHold
 
     @Override
     public int getItemCount() {
-        return torneos.size();
+        return torneo.size();
     }
     // Aqui está el holder y lo que va a manejar, es decir la vista para interactuar
     public static class ViewHolder extends RecyclerView.ViewHolder {

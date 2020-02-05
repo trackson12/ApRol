@@ -26,6 +26,10 @@ public class APIUtils {
         return  RetrofitClient.getTienda(API_URL).create(RestTienda.class);
     }
 
+    public static RestTorneo getServiceTorneo() {
+        return  RetrofitClient.getTorneo(API_URL).create(RestTorneo.class);
+    }
+
 
 
 }
