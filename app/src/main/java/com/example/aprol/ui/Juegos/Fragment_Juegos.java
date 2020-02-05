@@ -47,7 +47,7 @@ public class Fragment_Juegos extends Fragment {
     private Juego juego;
     AdapterJuegos adapter;
     List<Juego> list = new ArrayList<Juego>();
-    private FragmentManager fm;
+    private FragmentManager fm=getFragmentManager();
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
