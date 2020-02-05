@@ -26,13 +26,22 @@ import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity {
 
+    //Nos llevara al activity de registrar ususario
     Button registrar;
+
+    //Realizara la funcion de encontrar al usuario en la base de datos
     Button entrar;
+
+    //Recoge el usuario del layout
     EditText usuario;
+
+    //Recoge el usuario del layout
     EditText pwd;
 
     private Context context;
+    //Interfaz para la clase Cliente
     RestCliente clienteRest;
+
     APIUtils util;
     private SensorManager sensorManager;
 
@@ -56,50 +65,51 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        //Comprueba si hay conexion
         if(isNetworkAvailable()) {
             clienteRest = APIUtils.getService();
-        }else{
-            Toast.makeText(getBaseContext(), "Es necesaria una conexión a internet", Toast.LENGTH_SHORT).show();
-        }
-        entrar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Call<Cliente> call = clienteRest.usuario_registrado(usuario.getText().toString());
-                Call<Cliente> call = clienteRest.findById(usuario.getText().toString());
-                call.enqueue(new Callback<Cliente>() {
-                    @Override
-                    public void onResponse(Call<Cliente> call, Response<Cliente> response) {
 
-                        if (response.isSuccessful()){
-                            Toast.makeText(getBaseContext(), "Existe el cliente", Toast.LENGTH_SHORT).show();
+            entrar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //Llava al servidor y busca al cliente
+                    Call<Cliente> call = clienteRest.findById(usuario.getText().toString());
+                    call.enqueue(new Callback<Cliente>() {
+                        @Override
+                        public void onResponse(Call<Cliente> call, Response<Cliente> response) {
 
-                            Intent i = new Intent(v.getContext(), MainActivity.class);
-                            startActivityForResult(i,0);
+                            //Comprueba si el servidor responde , en caso positivo pasa a la siguiente activity
+                            if (response.isSuccessful()){
+                                Toast.makeText(getBaseContext(), "Existe el cliente", Toast.LENGTH_SHORT).show();
 
-                        }else {
-                            Toast.makeText(getBaseContext(), "8------D", Toast.LENGTH_SHORT).show();
+                                Intent i = new Intent(v.getContext(), MainActivity.class);
+                                startActivityForResult(i,0);
+
+                            }else {
+                                Toast.makeText(getBaseContext(), "No esta registrado", Toast.LENGTH_SHORT).show();
+
+                            }
 
                         }
 
-                    }
+                        //Sacara un mensaje de error si el servidor no responde
+                        @Override
+                        public void onFailure(Call<Cliente> call, Throwable t) {
+                            Toast.makeText(getBaseContext(), "El servidor no responde", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+            });
+        }else{
+            Toast.makeText(getBaseContext(), "Es necesaria una conexión a internet", Toast.LENGTH_SHORT).show();
+        }
 
-                    @Override
-                    public void onFailure(Call<Cliente> call, Throwable t) {
-
-                    }
-                });
-            }
-        });
     }
-    private boolean isNetworkAvailable() {
-        /*
-        ConnectivityManager connectivityManager
-                = (ConnectivityManager) this.getSystemService
-                (Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
 
-         */
+
+    //Comprueba si hay red
+    private boolean isNetworkAvailable() {
+
         ConnectivityManager connMgr = (ConnectivityManager) LoginActivity.this
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
 

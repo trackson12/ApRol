@@ -36,11 +36,22 @@ import retrofit2.Response;
 
 public class RegistroActivity extends AppCompatActivity {
 
+    //Vuelve a la LoginActivity
     Button volver;
+
+    //Guarda al usuario en la base de datos
     Button registra;
+
+    //Recoge el usuario del layout
     EditText usuario;
+
+    //Recoge el correo del layout
     EditText correo;
+
+    //Recoge la contraseña del layout
     EditText pwd;
+
+    //Usaremos el interface de cliente
     RestCliente clienteRest;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,41 +72,35 @@ public class RegistroActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
+
+
         if(isNetworkAvailable()) {
             clienteRest = APIUtils.getService();
+
+            registra.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (comprobarEmail(correo.getText().toString())){
+
+
+                        Cliente p = new Cliente(usuario.getText().toString(),correo.getText().toString(),pwd.getText().toString());
+
+                        //salvamos el producto
+                        salvarProducto(p);
+                    }else {
+                        Toast.makeText(RegistroActivity.this, "Email no valido", Toast.LENGTH_SHORT).show();
+
+                    }
+                }
+            });
         }else{
             Toast.makeText(getBaseContext(), "Es necesaria una conexión a internet", Toast.LENGTH_SHORT).show();
         }
-        registra.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (comprobarEmail(correo.getText().toString())){
 
-
-
-
-
-                    Cliente p = new Cliente(usuario.getText().toString(),correo.getText().toString(),pwd.getText().toString());
-                    // Vamos a ver en que modo estamos
-                    //salvamos el producto
-                    salvarProducto(p);
-                }else {
-                    Toast.makeText(RegistroActivity.this, "Email no valido", Toast.LENGTH_SHORT).show();
-
-                }
-            }
-        });
     }
-
+    //Comprueba que haya red
     private boolean isNetworkAvailable() {
-        /*
-        ConnectivityManager connectivityManager
-                = (ConnectivityManager) this.getSystemService
-                (Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
 
-         */
         ConnectivityManager connMgr = (ConnectivityManager) RegistroActivity.this
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
 
@@ -103,6 +108,8 @@ public class RegistroActivity extends AppCompatActivity {
 
         return networkInfo != null && networkInfo.isConnected();
     }
+
+    //LLama al servidor y en caso positivo guarda el usuario
     private void salvarProducto(Cliente p) {
         // Llamamos al metodo de crear
         Call<Cliente> call = clienteRest.create(p);
@@ -126,6 +133,8 @@ public class RegistroActivity extends AppCompatActivity {
             }
         });
     }
+
+    //Comprueba que el email tenga un formato correcto
     private boolean comprobarEmail(String email){
 
         // Patrón para validar el email
