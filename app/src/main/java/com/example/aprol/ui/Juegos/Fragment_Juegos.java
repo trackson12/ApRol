@@ -17,6 +17,7 @@ import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -24,6 +25,7 @@ import com.example.aprol.R;
 import com.example.aprol.objeto.Juego;
 import com.example.aprol.rest.APIUtils;
 import com.example.aprol.rest.RestJuego;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,12 +36,15 @@ import retrofit2.Response;
 
 public class Fragment_Juegos extends Fragment {
     private View root;
+    private ArrayList<Juego> listar;
     private Context context;
     ConstraintLayout constr;
+    private FloatingActionButton fabAñadir;
     private RecyclerView recyclerView;
     private LinearLayout linla;
     RestJuego juegoRest;
     ListView listView;
+    private Juego juego;
     AdapterJuegos adapter;
     List<Juego> list = new ArrayList<Juego>();
     private FragmentManager fm;
@@ -47,9 +52,23 @@ public class Fragment_Juegos extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         root= inflater.inflate(R.layout.fragment_lista_juegos, container, false);
-        constr = (ConstraintLayout) root.findViewById(R.id.rvFragmentJuego);
-        //linla = (LinearLayout) root.findViewById(R.id.LinLjueg);
+        constr = (ConstraintLayout) root.findViewById(R.id.LinJuegos);
         recyclerView = (RecyclerView)  root.findViewById(R.id.rvFragmentJuego_recycler);
+        fabAñadir=(FloatingActionButton) root.findViewById(R.id.fabAñadirJuego);
+
+
+        fabAñadir.setOnClickListener(v -> {
+            Fragment_Detalles_Juegos dj= Fragment_Detalles_Juegos.newInstance("crear");
+            FragmentTransaction transaction = getFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,dj);
+            transaction.addToBackStack(null);
+            transaction.commit();
+            /*DetallesJuegos de= DetallesJuegos.newInstance("crear");
+            FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction().replace(R.id.nav_host_fragment, de);
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commit();*/
+        });
+
+
         //setContentView(R.layout.fragment_lista_juegos);
 
         if(isNetworkAvailable()) {
@@ -63,6 +82,9 @@ public class Fragment_Juegos extends Fragment {
 
         return root;
     }
+
+
+
 
     private boolean isNetworkAvailable() {
         /*

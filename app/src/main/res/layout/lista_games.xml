@@ -23,7 +23,9 @@
         android:layout_marginLeft="12dp"
         android:layout_toRightOf="@id/imgJuego"
         android:gravity="center_vertical"
-        android:textSize="16sp" />
+        android:textColor="@color/design_default_color_primary"
+        android:textSize="18sp"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/N_jug"
@@ -36,5 +38,8 @@
         android:layout_toEndOf="@id/tituloJuego"
         android:layout_toRightOf="@id/tituloJuego"
         android:gravity="center_vertical"
-        android:textSize="16sp" />
+        android:textAlignment="center"
+        android:textColor="@color/design_default_color_primary"
+        android:textSize="18sp"
+        android:textStyle="bold|italic" />
 </RelativeLayout>

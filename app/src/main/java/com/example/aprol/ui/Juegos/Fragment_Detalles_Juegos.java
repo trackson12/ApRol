@@ -57,13 +57,13 @@ public class Fragment_Detalles_Juegos extends Fragment {
 
 
         Bundle b = getArguments();
-         Juego juego = (Juego) b.getSerializable("juego");
+         Juego juego = (Juego) b.getSerializable("Juego");
 
 
         tvNombreJuegosDetalle.setText(juego.getNombre());
         tvNumeroJugadoresDetalle.setText(juego.getN_jugadores());
         tvDescripcionJuegosDetalle.setText(juego.getDescripcion());
-        Log.e("mecagoentodojoder","pedo"+ juego.getNombre());
+
         //Picasso.with(this).load(juegos.getImagen()).into(ivFotoJuegosDetalle);
 
         return root;
@@ -89,7 +89,7 @@ public class Fragment_Detalles_Juegos extends Fragment {
         tvNombreJuegosDetalle.setText(juego.getNombre());
         tvNumeroJugadoresDetalle.setText(juego.getN_jugadores());
         tvDescripcionJuegosDetalle.setText(juego.getDescripcion());
-        Log.e("mecagoentodojoder","pedo"+ juego.getNombre());
+
         //Picasso.with(this).load(juegos.getImagen()).into(ivFotoJuegosDetalle);
 
 
