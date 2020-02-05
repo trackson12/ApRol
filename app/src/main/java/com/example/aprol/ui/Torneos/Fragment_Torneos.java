@@ -10,12 +10,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.aprol.R;
 
 public class Fragment_Torneos extends Fragment {
     private View root;
-    ListView torneoView;
+    RecyclerView torneoView;
     ConstraintLayout constr;
 
     @Override
@@ -23,7 +24,7 @@ public class Fragment_Torneos extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         root= inflater.inflate(R.layout.fragment_lista_torneos, container, false);
         constr = (ConstraintLayout) root.findViewById(R.id.rvFragmentJuego);
-        torneoView = (ListView) root.findViewById(R.id.tournament_list);
+        torneoView = (RecyclerView) root.findViewById(R.id.tournament_list);
         return root;
     }
 }
