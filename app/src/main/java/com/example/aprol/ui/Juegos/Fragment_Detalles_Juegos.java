@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.webkit.PermissionRequest;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -108,18 +109,16 @@ public class Fragment_Detalles_Juegos extends Fragment {
         tvDescripcionJuegosDetalle=(TextView) root.findViewById(R.id.tvDescripcionDetJuego);
         ivFotoJuegosDetalle=(ImageView)root.findViewById(R.id.ivImgDetJuego);
         añadirFoto=(Button)root.findViewById(R.id.btnAñadirFotoJuego) ;
+        añadirJuego=(Button)root.findViewById(R.id.btnInsertarJuego);
+        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         pedirMultiplesPermisos();
-        añadirFoto.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mostrarDialogoFoto();
-            }
-        });
+        añadirFoto.setOnClickListener(v -> mostrarDialogoFoto());
 
 
         Bundle b = getArguments();
        if(b.getString("tipo").equals("crear")){
-
+            añadirJuego.setVisibility(View.VISIBLE);
+            añadirFoto.setVisibility(View.VISIBLE);
        }
        if(b.getString("tipo").equals("ver")){
            Juego juego = (Juego) b.getSerializable("Juego");
@@ -130,11 +129,11 @@ public class Fragment_Detalles_Juegos extends Fragment {
            tvNombreJuegosDetalle.setText(juego.getNombre());
            tvNumeroJugadoresDetalle.setText(juego.getN_jugadores());
            tvDescripcionJuegosDetalle.setText(juego.getDescripcion());
-
            //Picasso.with(this).load(juegos.getImagen()).into(ivFotoJuegosDetalle);
-
+           añadirJuego.setVisibility(View.GONE);
+           añadirFoto.setVisibility(View.GONE);
        }
-
+        //getActivity().onBackPressed();
 
 
 

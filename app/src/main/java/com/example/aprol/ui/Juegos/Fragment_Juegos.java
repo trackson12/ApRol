@@ -55,7 +55,7 @@ public class Fragment_Juegos extends Fragment {
         constr = (ConstraintLayout) root.findViewById(R.id.LinJuegos);
         recyclerView = (RecyclerView)  root.findViewById(R.id.rvFragmentJuego_recycler);
         fabAñadir=(FloatingActionButton) root.findViewById(R.id.fabAñadirJuego);
-
+        //getActivity().onBackPressed();
 
         fabAñadir.setOnClickListener(v -> {
             Fragment_Detalles_Juegos dj= Fragment_Detalles_Juegos.newInstance("crear");

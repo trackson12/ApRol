@@ -9,6 +9,7 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -66,7 +67,7 @@ public class LoginActivity extends AppCompatActivity {
         pwd = (EditText) findViewById(R.id.etPwdLogin);
         registrar = (Button)findViewById(R.id.btnRegistrar);
         entrar = (Button)findViewById(R.id.btnAceptar);
-
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         registrar.setOnClickListener(new View.OnClickListener(){
 
             @Override

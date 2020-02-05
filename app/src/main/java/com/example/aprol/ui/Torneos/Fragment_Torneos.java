@@ -57,7 +57,7 @@ public class Fragment_Torneos extends Fragment {
         fabVoz=(FloatingActionButton)root.findViewById(R.id.fabVozTorneo);
         constr = (ConstraintLayout) root.findViewById(R.id.LinTorneos);
         torneoView = (RecyclerView) root.findViewById(R.id.tournament_list);
-
+        //getActivity().onBackPressed();
         fabVoz.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

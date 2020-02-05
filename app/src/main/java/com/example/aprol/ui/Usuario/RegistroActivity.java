@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -64,14 +65,10 @@ public class RegistroActivity extends AppCompatActivity {
         usuario = (EditText) findViewById(R.id.etUsuRegistro);
         correo = (EditText)findViewById(R.id.etEmailRegistro);
         pwd = (EditText)findViewById(R.id.etPwdRegistro);
-
-        volver.setOnClickListener(new View.OnClickListener(){
-
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(RegistroActivity.this, LoginActivity.class);
-                startActivity(i);
-            }
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+        volver.setOnClickListener(v -> {
+            Intent i = new Intent(RegistroActivity.this, LoginActivity.class);
+            startActivity(i);
         });
 
 
