@@ -9,6 +9,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.aprol.R;
 
+import java.util.Calendar;
+import java.util.Date;
+
 public class LoginActivity extends AppCompatActivity {
 
     Button registrar;
@@ -27,6 +30,9 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent i = new Intent(LoginActivity.this, RegistroActivity.class);
                 startActivity(i);
+
+                Date token = Calendar.getInstance().getTime();
+
             }
         });
     }
