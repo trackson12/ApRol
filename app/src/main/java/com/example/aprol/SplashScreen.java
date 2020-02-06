@@ -6,23 +6,31 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
+import android.telecom.Call;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.aprol.objeto.Cliente;
+import com.example.aprol.rest.APIUtils;
+import com.example.aprol.rest.RestCliente;
 import com.example.aprol.ui.Usuario.LoginActivity;
+import com.google.android.gms.common.api.Response;
 
 import java.util.Calendar;
 
 public class SplashScreen extends AppCompatActivity {
 
-    //private  RestCliente clienteRest;
+    private RestCliente clienteRest;
+    private APIUtils api;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
         if(isNetworkAvailable()) {
-           Cliente = ApiUtils.getService();
+           Cliente c = (Cliente) APIUtils.getService();
         }else{
             Toast.makeText(getApplicationContext(), "Es necesaria una conexión a internet", Toast.LENGTH_SHORT).show();
         }
@@ -53,23 +61,9 @@ public class SplashScreen extends AppCompatActivity {
 
 
     private void buscarToken(String tok) {
-        Call<Usuario> call = misTapasRest.comproToken(tok);
-        call.enqueue(new Callback<Usuario>() {
-            @Override
-            public void onResponse(Call<Usuario> call, Response<Usuario> response) {
-                if (response.isSuccessful()) {
-                    Intent intent = new Intent(SplashScreen.this, MainActivity.class);
-                    startActivity(intent);
+        Call<Cliente> call = clienteRest.comproToken(tok);
+        call.enqueue(new Callback<Cliente>() {
 
-                } else {
-                    Intent intent = new Intent(SplashScreen.this, com.example.aprol.ui.Usuario.LoginActivity.class);
-                    startActivity(intent);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Usuario> call, Throwable t) {
-                Log.e("ERROR: ", t.getMessage());
-            }
         });
+    }
 }

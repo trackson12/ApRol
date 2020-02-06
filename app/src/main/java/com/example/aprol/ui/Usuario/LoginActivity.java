@@ -7,6 +7,8 @@ import android.hardware.SensorManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.telecom.Call;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -20,6 +22,7 @@ import com.example.aprol.R;
 import com.example.aprol.objeto.Cliente;
 import com.example.aprol.rest.APIUtils;
 import com.example.aprol.rest.RestCliente;
+import com.google.android.gms.common.api.Response;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -153,7 +156,48 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+    private void buscarUsuario(){
+        Call<Cliente> call = clienteRest.findById(etLoginUser.getText().toString());
+        Toast toast = Toast.makeText(getApplicationContext(), "hola", Toast.LENGTH_LONG);
+        //toast.show();
+        Log.e("cosa","a");
+        call.enqueue(new Callback<Cliente>() {
+                         @Override
+                         public void onResponse(Call<Cliente> call, Response<Cliente> response) {
+                             if(response.isSuccessful()){
+                                 Usuario user = response.body();
+                                 if(user != null){
+                                     //para coger la id del dispositivo
+                                     String android_id = Settings.Secure.getString(getContentResolver(),
+                                             Settings.Secure.ANDROID_ID);
+                                     //para coger la fecha actual y pasarla a md5
+                                     Date currentTime = Calendar.getInstance().getTime();
+                                     String token=currentTime.toString();
+                                     token= md5(token);
+                                     user.setToken(token);
 
+                                     actualizarToken(user.getId(),user);
+                                     BdController.insertarData(getApplicationContext(),android_id,token,user.getId());
+                                     Intent intent = new Intent(ActividadLogin.this, MainActivity.class);
+
+                                     startActivity(intent);
+                                 }else {
+                                     Toast.makeText(getApplicationContext(), "No existe el usuario, registre por favor", Toast.LENGTH_SHORT).show();
+                                 }
+                             }else{
+                                 Toast.makeText(getApplicationContext(),"Por favor introduce datos ",Toast.LENGTH_SHORT).show();
+                             }
+                         }
+
+
+
+
+
+
+
+
+
+                     }
     //Comprueba si hay red
     private boolean isNetworkAvailable() {
 
