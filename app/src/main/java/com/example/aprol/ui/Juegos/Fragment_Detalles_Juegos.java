@@ -170,7 +170,7 @@ public class Fragment_Detalles_Juegos extends Fragment {
            tvNombreJuegosDetalle.setText(juego.getNombre());
            tvNumeroJugadoresDetalle.setText(juego.getN_jugadores());
            tvDescripcionJuegosDetalle.setText(juego.getDescripcion());
-           Picasso.with(getContext()).load(juego.getFoto()).into(ivFotoJuegosDetalle);
+           //Picasso.with(getContext()).load(imagen).into(ivFotoJuegosDetalle);
            añadirJuego.setVisibility(View.GONE);
            añadirFoto.setVisibility(View.GONE);
        }

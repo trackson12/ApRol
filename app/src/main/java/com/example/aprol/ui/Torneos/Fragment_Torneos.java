@@ -9,9 +9,6 @@ import android.speech.RecognitionService;
 import android.speech.RecognizerIntent;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
@@ -34,6 +31,8 @@ import com.example.aprol.ui.Juegos.AdapterJuegos;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 
@@ -46,12 +45,18 @@ import static android.app.Activity.RESULT_OK;
 public class Fragment_Torneos extends Fragment {
     private View root;
     private RecyclerView torneoView;
-    FloatingActionButton fabVoz;
-    ConstraintLayout constr;
+    private FloatingActionButton fabVoz;
+    private ConstraintLayout constr;
     private TextView mEntradaTexto;
-    RestTorneo torneoRest;
-    List<Torneo> list = new ArrayList<Torneo>();
-    private static final int captura_voz=100;
+    private RestTorneo torneoRest;
+    private List<Torneo> list = new ArrayList<Torneo>();
+    private ArrayList<Torneo> ordenar = new ArrayList<Torneo>() ;
+    private static final int REQ_CODE_SPEECH_INPUT=10;
+    private String secuencia = "";
+    private static final int NADA = 10;
+    private static final int TIPO_ASC = 13;
+    private static final int TIPO_DESC = 14;
+    private int tipoFiltro = NADA;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -60,13 +65,18 @@ public class Fragment_Torneos extends Fragment {
         fabVoz=(FloatingActionButton)root.findViewById(R.id.fabVozTorneo);
         constr = (ConstraintLayout) root.findViewById(R.id.LinTorneos);
         torneoView = (RecyclerView) root.findViewById(R.id.tournament_list);
-        //getActivity().onBackPressed();
+
         fabVoz.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 iniciarEntradaVoz();
+
             }
         });
+
+
+
 
         if(isNetworkAvailable()) {
             torneoRest =  APIUtils.getServiceTorneo();
@@ -84,15 +94,13 @@ public class Fragment_Torneos extends Fragment {
     private void iniciarEntradaVoz() {
 
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        //reconoce en el idioma del telefono
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
-        intent.putExtra(RecognizerIntent.EXTRA_PROMPT,"Hablame papu");
-
-        try{
-            startActivityForResult(intent,captura_voz);
-
+        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "¿Cómo quieres ordenar la lista?");
+        try {
+            startActivityForResult(intent, REQ_CODE_SPEECH_INPUT);
         } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
@@ -100,22 +108,55 @@ public class Fragment_Torneos extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == this.getActivity().RESULT_CANCELED) {
+            return;
+        }
 
-        switch (requestCode){
-            case captura_voz:{
-                if (requestCode==RESULT_OK && null != data){
-                    ArrayList<String> resul = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-                    mEntradaTexto.setText(resul.get(0));
-                    Toast.makeText(getActivity(), mEntradaTexto.getText(), Toast.LENGTH_SHORT).show();
+        if (requestCode == REQ_CODE_SPEECH_INPUT) {
+            if (resultCode == RESULT_OK && data != null) {
+                ArrayList<String> voz = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                // Analizamos los que nos puede llegar
+                secuencia = "";
+                int tipoFiltro;
 
+                for (String v : voz) {
+                    secuencia += " " + v;
                 }
-                break;
-            }
 
+                if (secuencia != null) {
+                    analizarFiltroVoz(secuencia);
+                    ordenarTorneos();
+
+                    torneoView.setHasFixedSize(true);
+                    torneoView.setLayoutManager(new LinearLayoutManager(getActivity().getBaseContext()));
+                    torneoView.setAdapter(new AdapterTorneos((ArrayList<Torneo>) ordenar,getContext(),getFragmentManager()));
+                }
+            }
 
         }
 
     }
+
+
+
+    private void ordenarTorneos() {
+        switch (tipoFiltro) {
+            case NADA:
+            case TIPO_ASC:
+                Collections.sort(this.ordenar, (Torneo l1, Torneo l2) -> l1.getNombre().compareTo(l2.getNombre()));
+                break;
+
+            case TIPO_DESC:
+                Collections.sort(this.ordenar, (Torneo l1, Torneo l2) -> l2.getNombre().compareTo(l1.getNombre()));
+                break;
+
+            default:
+                break;
+
+        }
+    }
+
+
     private boolean isNetworkAvailable() {
         /*
         ConnectivityManager connectivityManager
@@ -143,6 +184,7 @@ public class Fragment_Torneos extends Fragment {
                     // Si tienes exito nos quedamos con el ResponseBody, listado en JSON
                     // Nos hace el pasrser automáticamente
                     list = response.body();
+                    ordenar = (ArrayList<Torneo>) response.body();
                     // adapter = new AdapterJuegos(list, getContext(),getActivity(),getFragmentManager());
 
                     torneoView.setHasFixedSize(true);
@@ -161,5 +203,23 @@ public class Fragment_Torneos extends Fragment {
         });
 
     }
+
+
+    private void analizarFiltroVoz(String secuencia) {
+        // Nombre
+        if ((secuencia.contains("tipo")) &&
+                ((secuencia.contains("ascendente") || secuencia.contains("normal")))) {
+            tipoFiltro = TIPO_ASC;
+        } else if ((secuencia.contains("tipo")) &&
+                ((secuencia.contains("descendente") || secuencia.contains("inverso")))) {
+            tipoFiltro = TIPO_DESC;
+
+            // Lugar = nombre
+        } else {
+            tipoFiltro = NADA;
+        }
+    }
+
+
 
 }

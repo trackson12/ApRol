@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.aprol.R;
 import com.example.aprol.objeto.Juego;
+import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
 import java.io.Serializable;
@@ -64,7 +65,8 @@ public class AdapterJuegos extends RecyclerView.Adapter<AdapterJuegos.ViewHolder
         final Juego actual=lista.get(position);
         holder.titulo.setText(actual.getNombre());
         holder.njug.setText(actual.getN_jugadores());
-       // Picasso.with(context).load(actual.getFoto()).transform(new imagenRedonda()).into(holder.imagen);
+        //Picasso.with(context).load(actual.getFoto()).transform(new imagenRedonda()).into(holder.imagen);
+        holder.imagen.setImageBitmap(base64ToBitmap(actual.getFoto()));
         holder.parentLayout.setOnClickListener(v -> {
 
 
