@@ -2,10 +2,13 @@ package com.example.aprol.ui.Juegos;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -13,6 +16,9 @@ import android.provider.MediaStore;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -27,18 +33,26 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.aprol.R;
+import com.example.aprol.objeto.Cliente;
 import com.example.aprol.objeto.Juego;
+import com.example.aprol.rest.APIUtils;
 import com.example.aprol.rest.RestJuego;
+import com.example.aprol.ui.Usuario.RegistroActivity;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.DexterError;
 import com.karumi.dexter.listener.PermissionRequestErrorListener;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
+import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class Fragment_Detalles_Juegos extends Fragment {
     private View root;
@@ -50,7 +64,7 @@ public class Fragment_Detalles_Juegos extends Fragment {
 
     private static final int GALERIA = 1 ;
     private static final int CAMARA = 2 ;
-    private Bitmap imagenFinal;
+    private String imagenFinal;
     private Juego juego;
 
     public static Fragment_Detalles_Juegos newInstance(String tipo) {
@@ -65,6 +79,29 @@ public class Fragment_Detalles_Juegos extends Fragment {
 
         return f;
     }
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.main,menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id=item.getItemId();
+        switch (id){
+            case R.id.it_detallesJuegos:
+                getActivity().onBackPressed();
+                break;
+
+        }
+        return super.onOptionsItemSelected(item);
+    }
     public static Fragment_Detalles_Juegos newInstance(String tipo, Juego j) {
 
         Bundle b = new Bundle();
@@ -78,6 +115,7 @@ public class Fragment_Detalles_Juegos extends Fragment {
 
         return f;
     }
+
     /*public View onCreate(@NonNull LayoutInflater inflater, @Nullable ViewGroup container){
         root=inflater.inflate(R.layout.fragment_detalle_juego, container, false);
         tvNombreJuegosDetalle=(TextView)root.findViewById(R.id.tvNombreDetJuego);
@@ -115,6 +153,9 @@ public class Fragment_Detalles_Juegos extends Fragment {
         añadirFoto.setOnClickListener(v -> mostrarDialogoFoto());
 
 
+
+
+
         Bundle b = getArguments();
        if(b.getString("tipo").equals("crear")){
             añadirJuego.setVisibility(View.VISIBLE);
@@ -129,14 +170,49 @@ public class Fragment_Detalles_Juegos extends Fragment {
            tvNombreJuegosDetalle.setText(juego.getNombre());
            tvNumeroJugadoresDetalle.setText(juego.getN_jugadores());
            tvDescripcionJuegosDetalle.setText(juego.getDescripcion());
-           //Picasso.with(this).load(juegos.getImagen()).into(ivFotoJuegosDetalle);
+           Picasso.with(getContext()).load(juego.getFoto()).into(ivFotoJuegosDetalle);
            añadirJuego.setVisibility(View.GONE);
            añadirFoto.setVisibility(View.GONE);
        }
-        //getActivity().onBackPressed();
 
 
 
+        if(isNetworkAvailable()) {
+            juegoRest = APIUtils.getServiceJuego();
+            //getActivity().onBackPressed();
+            añadirJuego.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+
+                    Juego j = new Juego(tvNombreJuegosDetalle.getText().toString(), imagenFinal,tvNumeroJugadoresDetalle.getText().toString(),tvDescripcionJuegosDetalle.getText().toString());
+                    Call<Juego> call = juegoRest.create(j);
+                    call.enqueue(new Callback<Juego>() {
+                        // Si todo ok
+                        @Override
+                        public void onResponse(Call<Juego> call, Response<Juego> response) {
+                            if(response.isSuccessful()){
+                                Toast.makeText(getContext(), "Juego guardado", Toast.LENGTH_SHORT).show();
+                            }else {
+                                Toast.makeText(getContext(), "Error al guardar Juego", Toast.LENGTH_SHORT).show();
+
+                            }
+
+                        }
+
+                        // Si error
+                        @Override
+                        public void onFailure(Call<Juego> call, Throwable t) {
+                            Log.e("ERROR: ", t.getMessage());
+                        }
+                    });
+                }
+            });
+
+        }else{
+            Toast.makeText(getContext(), "Es necesaria una conexión a internet", Toast.LENGTH_SHORT).show();
+
+        }
         return  root;
     }
     private void mostrarDialogoFoto(){
@@ -201,7 +277,7 @@ public class Fragment_Detalles_Juegos extends Fragment {
                 try {
                     // Obtenemos el bitmap de su almacenamiento externo
                     Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getApplicationContext().getContentResolver(), contentURI);
-                    imagenFinal=bitmap;
+                    imagenFinal=bitmapToBase64(bitmap);
                     //path = salvarImagen(bitmap);
                     Toast.makeText(getActivity(), "¡Foto salvada!", Toast.LENGTH_SHORT).show();
                     this.ivFotoJuegosDetalle.setImageBitmap(bitmap);
@@ -223,7 +299,7 @@ public class Fragment_Detalles_Juegos extends Fragment {
                 thumbnail = (Bitmap) data.getExtras().get("data");
                 // Esto para alta
                 // thumbnail = MediaStore.Images.Media.getBitmap(getActivity().getApplicationContext().getContentResolver(), photoURI);
-                imagenFinal=thumbnail;
+                imagenFinal=bitmapToBase64(thumbnail);
                 // salvamos
                 // path = salvarImagen(thumbnail); //  photoURI.getPath(); Podríamos poner esto, pero vamos a salvarla comprimida y borramos la no comprimida (por gusto)
 
@@ -306,5 +382,22 @@ public class Fragment_Detalles_Juegos extends Fragment {
     private Bitmap base64ToBitmap(String b64) {
         byte[] imageAsBytes = Base64.decode(b64.getBytes(), Base64.DEFAULT);
         return BitmapFactory.decodeByteArray(imageAsBytes, 0, imageAsBytes.length);
+    }
+
+    private boolean isNetworkAvailable() {
+        /*
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) this.getSystemService
+                (Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+
+         */
+        ConnectivityManager connMgr = (ConnectivityManager) getActivity()
+                .getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+
+        return networkInfo != null && networkInfo.isConnected();
     }
 }

@@ -33,7 +33,7 @@ public interface RestJuego {
     // Crear un producto
     //POST: http://localhost:8080/productos
     @POST("juego/")
-    Call<Juego> create(@Body Cliente producto);
+    Call<Juego> create(@Body Juego juego);
 
     // Elimina un productp
     // DELETE: http://localhost:8080/productos/{id}

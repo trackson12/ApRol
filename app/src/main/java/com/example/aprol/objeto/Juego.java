@@ -15,7 +15,7 @@ public class Juego implements Serializable {
 
     @SerializedName("foto")
     @Expose
-    private Bitmap foto;
+    private String foto;
 
     @SerializedName("n_jugadores")
     @Expose
@@ -25,6 +25,13 @@ public class Juego implements Serializable {
     @Expose
     private String descripcion;
 
+    public Juego(String nombre, String foto, String n_jugadores, String descripcion) {
+        this.nombre = nombre;
+        this.foto = foto;
+        this.n_jugadores = n_jugadores;
+        this.descripcion = descripcion;
+    }
+
     public String getNombre() {
         return nombre;
     }
@@ -33,11 +40,11 @@ public class Juego implements Serializable {
         this.nombre = nombre;
     }
 
-    public Bitmap getFoto() {
+    public String getFoto() {
         return foto;
     }
 
-    public void setFoto(Bitmap foto) {
+    public void setFoto(String foto) {
         this.foto = foto;
     }
 
