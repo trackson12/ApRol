@@ -8,7 +8,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.telecom.Call;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -22,18 +21,18 @@ import com.example.aprol.R;
 import com.example.aprol.objeto.Cliente;
 import com.example.aprol.rest.APIUtils;
 import com.example.aprol.rest.RestCliente;
-import com.google.android.gms.common.api.Response;
+import com.example.aprol.ui.DBController;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import okio.HashingSink;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-import java.util.Calendar;
-import java.util.Date;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -80,7 +79,7 @@ public class LoginActivity extends AppCompatActivity {
                 Intent i = new Intent(LoginActivity.this, RegistroActivity.class);
                 startActivity(i);
 
-                Date token = Calendar.getInstance().getTime();
+
 
             }
         });
@@ -93,18 +92,15 @@ public class LoginActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     //Llava al servidor y busca al cliente
-                    Call<Cliente> call = clienteRest.findById(usuario.getText().toString());
+                    retrofit2.Call<Cliente> call = clienteRest.findById(usuario.getText().toString());
                     call.enqueue(new Callback<Cliente>() {
                         @Override
-                        public void onResponse(Call<Cliente> call, Response<Cliente> response) {
-
-                            //Comprueba si el servidor responde , en caso positivo pasa a la siguiente activity
-                            if (response.isSuccessful()){
+                        public void onResponse(retrofit2.Call<Cliente> call, retrofit2.Response<Cliente> response) {
+                            if (response.isSuccessful()) {
                                 Toast.makeText(getBaseContext(), "Existe el cliente", Toast.LENGTH_SHORT).show();
 
                                 Intent i = new Intent(v.getContext(), MainActivity.class);
-                                startActivityForResult(i,0);
-
+                                startActivityForResult(i, 0);
                             }else {
                                 Toast.makeText(getBaseContext(), "No esta registrado", Toast.LENGTH_SHORT).show();
 
@@ -114,8 +110,8 @@ public class LoginActivity extends AppCompatActivity {
 
                         //Sacara un mensaje de error si el servidor no responde
                         @Override
-                        public void onFailure(Call<Cliente> call, Throwable t) {
-                            Toast.makeText(getBaseContext(), "El servidor no responde", Toast.LENGTH_SHORT).show();
+                        public void onFailure(retrofit2.Call<Cliente> call, Throwable t) {
+
                         }
                     });
                 }
@@ -156,48 +152,6 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-    private void buscarUsuario(){
-        Call<Cliente> call = clienteRest.findById(etLoginUser.getText().toString());
-        Toast toast = Toast.makeText(getApplicationContext(), "hola", Toast.LENGTH_LONG);
-        //toast.show();
-        Log.e("cosa","a");
-        call.enqueue(new Callback<Cliente>() {
-                         @Override
-                         public void onResponse(Call<Cliente> call, Response<Cliente> response) {
-                             if(response.isSuccessful()){
-                                 Usuario user = response.body();
-                                 if(user != null){
-                                     //para coger la id del dispositivo
-                                     String android_id = Settings.Secure.getString(getContentResolver(),
-                                             Settings.Secure.ANDROID_ID);
-                                     //para coger la fecha actual y pasarla a md5
-                                     Date currentTime = Calendar.getInstance().getTime();
-                                     String token=currentTime.toString();
-                                     token= md5(token);
-                                     user.setToken(token);
-
-                                     actualizarToken(user.getId(),user);
-                                     BdController.insertarData(getApplicationContext(),android_id,token,user.getId());
-                                     Intent intent = new Intent(ActividadLogin.this, MainActivity.class);
-
-                                     startActivity(intent);
-                                 }else {
-                                     Toast.makeText(getApplicationContext(), "No existe el usuario, registre por favor", Toast.LENGTH_SHORT).show();
-                                 }
-                             }else{
-                                 Toast.makeText(getApplicationContext(),"Por favor introduce datos ",Toast.LENGTH_SHORT).show();
-                             }
-                         }
-
-
-
-
-
-
-
-
-
-                     }
     //Comprueba si hay red
     private boolean isNetworkAvailable() {
 
@@ -209,4 +163,78 @@ public class LoginActivity extends AppCompatActivity {
         return networkInfo != null && networkInfo.isConnected();
     }
 
+    /*private void buscarUsuario(){
+        retrofit2.Call<Cliente> call = clienteRest.findById(usuario.getText().toString());
+        Toast toast = Toast.makeText(getApplicationContext(), "hola", Toast.LENGTH_LONG);
+        //toast.show();
+        Log.e("cosa","a");
+        call.enqueue(new Callback<Cliente>() {
+            @Override
+            public void onResponse(retrofit2.Call<Cliente> call, retrofit2.Response<Cliente> response) {
+                if (response.isSuccessful()) {
+                    Cliente cli = response.body();
+                    if (cli != null) {
+                        //para coger la id del dispositivo
+                        String android_id = Settings.Secure.getString(getContentResolver(),
+                                Settings.Secure.ANDROID_ID);
+                        //para coger la fecha actual y pasarla a md5
+                        Date currentTime = Calendar.getInstance().getTime();
+                        String token = currentTime.toString();
+                        token = md5(token);
+                        cli.setToken(token);
+
+                        actualizarToken(cli.getId(), cli);
+                        DBController.insertarData(getApplicationContext(), token);
+                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+
+                        startActivity(intent);
+                    } else {
+                        Toast.makeText(getApplicationContext(), "No existe el usuario, registre por favor", Toast.LENGTH_SHORT).show();
+                    }
+                }else{
+                    Toast.makeText(getApplicationContext(),"Por favor introduce datos ",Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Cliente> call, Throwable t) {
+
+            }
+        });
+    }
+
+    private void actualizarToken(int id, Cliente cli) {
+        retrofit2.Call<Cliente> call = clienteRest.update(usuario.getText().toString() , cli);
+        Toast toast = Toast.makeText(getApplicationContext(), "hola", Toast.LENGTH_LONG);
+        //toast.show();
+        Log.e("cosa","a");
+        call.enqueue(new Callback<Cliente>() {
+
+            @Override
+            public void onResponse(Call<Cliente> call, Response<Cliente> response) {
+
+            }
+
+            @Override
+            public void onFailure(Call<Cliente> call, Throwable t) {
+
+            }
+        });
+    }
+
+    private String md5(String token) {
+        try{
+            MessageDigest digest = java.security.MessageDigest.getInstance("MD5");
+            digest.update(token.getBytes());
+            byte messageDigest[] = digest.digest();
+
+            StringBuffer hexString = new StringBuffer();
+            for (int i = 0; i<messageDigest.length;i++)
+                hexString.append(Integer.toHexString(0xFF & messageDigest[i]));
+            return hexString.toString();
+        }catch (NoSuchAlgorithmException e){
+            e.printStackTrace();
+        }
+        return "";
+    }*/
 }

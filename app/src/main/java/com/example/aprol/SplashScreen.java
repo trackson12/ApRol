@@ -15,10 +15,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.aprol.objeto.Cliente;
 import com.example.aprol.rest.APIUtils;
 import com.example.aprol.rest.RestCliente;
+import com.example.aprol.ui.DBController;
 import com.example.aprol.ui.Usuario.LoginActivity;
 import com.google.android.gms.common.api.Response;
 
 import java.util.Calendar;
+
+import retrofit2.Callback;
 
 public class SplashScreen extends AppCompatActivity {
 
@@ -29,41 +32,53 @@ public class SplashScreen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
-        if(isNetworkAvailable()) {
-           Cliente c = (Cliente) APIUtils.getService();
+        /*if(isNetworkAvailable()) {
+           clienteRest =  APIUtils.getService();
         }else{
             Toast.makeText(getApplicationContext(), "Es necesaria una conexión a internet", Toast.LENGTH_SHORT).show();
-        }
+        }*/
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent i = new Intent(SplashScreen.this, com.example.aprol.ui.Usuario.LoginActivity.class);
-                startActivity(i);
-
-                String token_sqLite = BdController.selectToken(getBaseContext());
+                Intent intent = new Intent(SplashScreen.this, com.example.aprol.ui.Usuario.LoginActivity.class);
+                startActivity(intent);
+                /*String token_sqLite = DBController.selectToken(getBaseContext());
                 if (token_sqLite.equals("")) {
-                    Intent intent = new Intent(SplashScreen.this, com.example.aprol.ui.Usuario.LoginActivity.class);
-                    startActivity(intent);
+
                 } else {
                     buscarToken(token_sqLite);
-                }
+                }*/
             }
         },2000);
 
     }
-    private boolean isNetworkAvailable() {
+   /* private boolean isNetworkAvailable() {
         ConnectivityManager connectivityManager
                 = (ConnectivityManager) this.getSystemService
                 (Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
-    }
+    }*/
 
-
-    private void buscarToken(String tok) {
-        Call<Cliente> call = clienteRest.comproToken(tok);
+   /* private void buscarToken(String tok) {
+        retrofit2.Call<Cliente> call = clienteRest.findById(tok);
         call.enqueue(new Callback<Cliente>() {
+            @Override
+            public void onResponse(retrofit2.Call<Cliente> call, retrofit2.Response<Cliente> response) {
+                if (response.isSuccessful()) {
+                    Intent intent = new Intent(SplashScreen.this, MainActivity.class);
+                    startActivity(intent);
 
+                } else {
+                    Intent intent = new Intent(SplashScreen.this, LoginActivity.class);
+                    startActivity(intent);
+                }
+            }
+
+            @Override
+            public void onFailure(retrofit2.Call<Cliente> call, Throwable t) {
+                Log.e("ERROR: ", t.getMessage());
+            }
         });
-    }
+    }*/
 }
