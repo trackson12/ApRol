@@ -32,29 +32,29 @@ import retrofit2.Response;
 public class LoginActivity extends AppCompatActivity {
 
     //Nos llevara al activity de registrar ususario
-    Button registrar;
+    private Button registrar;
 
     //Realizara la funcion de encontrar al usuario en la base de datos
-    Button entrar;
+    private Button entrar;
 
     //Recoge el usuario del layout
-    EditText usuario;
+    private EditText usuario;
 
     //Recoge el usuario del layout
-    EditText pwd;
+    private EditText pwd;
 
     private Context context;
     //Interfaz para la clase Cliente
-    RestCliente clienteRest;
+    private RestCliente clienteRest;
 
-    APIUtils util;
+    private APIUtils util;
     private SensorManager sensorManager;
 
-    Calendar cal = Calendar.getInstance();
+    private Calendar cal = Calendar.getInstance();
 
-    Date date = cal.getTime();
-    SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
-    String date1 = format1.format(date);
+    private Date date = cal.getTime();
+    private SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
+    private String date1 = format1.format(date);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,15 +115,15 @@ public class LoginActivity extends AppCompatActivity {
 
             /**
             Cliente p = new Cliente(date1);
-            Call<Cliente> call = clienteRest.create(p);
+            Call<Cliente> call = clienteRest.update(usuario.getText().toString(),p);
             call.enqueue(new Callback<Cliente>() {
 
                 @Override
                 public void onResponse(Call<Cliente> call, Response<Cliente> response) {
                     if(response.isSuccessful()){
-                        Toast.makeText(LoginActivity.this, "Cliente guardado", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(LoginActivity.this, "Cliente no expirado", Toast.LENGTH_SHORT).show();
                     }else {
-                        Toast.makeText(LoginActivity.this, "Error al guardar cliente", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(LoginActivity.this, "Cliente expirado", Toast.LENGTH_SHORT).show();
 
                     }
 

@@ -8,8 +8,8 @@ import androidx.fragment.app.Fragment;
 
 public class Fragment_Detalle_Torneos extends Fragment {
     private View root;
-    TextView tvPrimerPremioTorneo,tvSegunPremioTorneo,tvTercerPremioTorneo;
-    ImageView ivFotoJuegosDetalle;
+    private TextView tvPrimerPremioTorneo,tvSegunPremioTorneo,tvTercerPremioTorneo;
+    private ImageView ivFotoJuegosDetalle;
 
 
 

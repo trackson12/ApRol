@@ -85,10 +85,10 @@ public class mapa extends Fragment implements OnMapReadyCallback, GoogleMap.OnMa
 
     private RestTienda tiendaRest;
     private Tienda comercio;
-    List<Tienda> list = new ArrayList<Tienda>();
-    LatLng tiendas = new LatLng(38.690265, -4.106939);
+    private List<Tienda> list = new ArrayList<Tienda>();
+    private LatLng tiendas = new LatLng(38.690265, -4.106939);
 
-    String puntuacion;
+    private String puntuacion;
 
     // Para obtener el punto actual (no es necesario para el mapa)
     // Pero si para obtener las latitud y la longitud

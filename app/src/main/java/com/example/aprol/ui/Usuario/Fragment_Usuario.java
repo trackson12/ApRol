@@ -36,20 +36,20 @@ public class Fragment_Usuario extends Fragment {
     private View root;
     private Fragment_Registro f2;
     private Fragment_Usuario f1;
-    Button b1;
-    Button aceptar;
-    EditText usuario;
-    EditText pass;
+    private Button b1;
+    private Button aceptar;
+    private EditText usuario;
+    private EditText pass;
     private Context context;
-    RestCliente clienteRest;
-    APIUtils util;
+    private RestCliente clienteRest;
+    private APIUtils util;
     private SensorManager sensorManager;
 
-    Calendar cal = Calendar.getInstance();
+    private Calendar cal = Calendar.getInstance();
 
-    Date date = cal.getTime();
-    SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
-    String date1 = format1.format(date);
+    private Date date = cal.getTime();
+    private SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
+    private String date1 = format1.format(date);
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {

@@ -38,15 +38,15 @@ public class Fragment_Juegos extends Fragment {
     private View root;
     private ArrayList<Juego> listar;
     private Context context;
-    ConstraintLayout constr;
+    private ConstraintLayout constr;
     private FloatingActionButton fabAñadir;
     private RecyclerView recyclerView;
     private LinearLayout linla;
-    RestJuego juegoRest;
-    ListView listView;
+    private RestJuego juegoRest;
+    private ListView listView;
     private Juego juego;
-    AdapterJuegos adapter;
-    List<Juego> list = new ArrayList<Juego>();
+    private AdapterJuegos adapter;
+    private List<Juego> list = new ArrayList<Juego>();
     private FragmentManager fm;
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,

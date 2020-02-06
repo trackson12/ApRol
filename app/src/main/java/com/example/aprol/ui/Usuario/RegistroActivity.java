@@ -37,19 +37,19 @@ import retrofit2.Response;
 public class RegistroActivity extends AppCompatActivity {
 
     //Vuelve a la LoginActivity
-    Button volver;
+    private Button volver;
 
     //Guarda al usuario en la base de datos
-    Button registra;
+    private Button registra;
 
     //Recoge el usuario del layout
-    EditText usuario;
+    private EditText usuario;
 
     //Recoge el correo del layout
-    EditText correo;
+    private EditText correo;
 
     //Recoge la contraseña del layout
-    EditText pwd;
+    private EditText pwd;
 
 
     //Usaremos el interface de cliente

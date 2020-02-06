@@ -45,12 +45,12 @@ import static android.app.Activity.RESULT_OK;
 public class Fragment_Torneos extends Fragment {
     private View root;
     private RecyclerView torneoView;
-    FloatingActionButton fabVoz;
-    ConstraintLayout constr;
+    private FloatingActionButton fabVoz;
+    private ConstraintLayout constr;
     private TextView mEntradaTexto;
-    RestTorneo torneoRest;
-    List<Torneo> list = new ArrayList<Torneo>();
-    ArrayList<Torneo> ordenar = new ArrayList<Torneo>() ;
+    private RestTorneo torneoRest;
+    private List<Torneo> list = new ArrayList<Torneo>();
+    private ArrayList<Torneo> ordenar = new ArrayList<Torneo>() ;
     private static final int REQ_CODE_SPEECH_INPUT=10;
     private String secuencia = "";
     private static final int NADA = 10;

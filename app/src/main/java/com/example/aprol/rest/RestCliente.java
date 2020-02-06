@@ -34,8 +34,8 @@ public interface RestCliente {
     Call<Cliente> delete(@Path("id") Long id);
 
     // Actualiza un cliente
-    @PUT("registro/{id}")
-    Call<Cliente> update(@Path("id") Long id, @Body Cliente producto);
+    @PUT("registro/{usuario}")
+    Call<Cliente> update(@Path("usuario") String usuario, @Body Cliente cliente);
 
     //Comprueba que el cliente este registrado
     @FormUrlEncoded

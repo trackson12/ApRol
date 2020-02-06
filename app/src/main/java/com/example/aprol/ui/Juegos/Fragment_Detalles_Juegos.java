@@ -18,9 +18,9 @@ import com.example.aprol.rest.RestJuego;
 
 public class Fragment_Detalles_Juegos extends Fragment {
     private View root;
-    TextView tvNombreJuegosDetalle,tvNumeroJugadoresDetalle,tvDescripcionJuegosDetalle;
-    ImageView ivFotoJuegosDetalle;
-    RestJuego juegoRest;
+    private TextView tvNombreJuegosDetalle,tvNumeroJugadoresDetalle,tvDescripcionJuegosDetalle;
+    private ImageView ivFotoJuegosDetalle;
+    private RestJuego juegoRest;
     private Juego juego;
 
     public static Fragment_Detalles_Juegos newInstance(String tipo) {
